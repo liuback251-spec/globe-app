@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Interactive Globe</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="globe-container"></div>
+
+  <div id="search-box">
+    <div class="search-icon">&#128269;</div>
+    <input type="text" id="search-input" placeholder="搜索国家 / Search country..." autocomplete="off" />
+    <div id="search-results" class="hidden"></div>
+  </div>
+
+  <div id="info-panel" class="hidden">
+    <button id="info-close" title="关闭">&times;</button>
+    <div id="info-header">
+      <span id="info-flag"></span>
+      <div>
+        <h2 id="info-name-zh"></h2>
+        <h3 id="info-name-en"></h3>
+      </div>
+    </div>
+    <div id="info-body">
+      <div class="info-row"><span class="info-label">首都</span><span id="info-capital"></span></div>
+      <div class="info-row"><span class="info-label">人口</span><span id="info-population"></span></div>
+      <div class="info-row"><span class="info-label">面积</span><span id="info-area"></span></div>
+      <div class="info-row"><span class="info-label">语言</span><span id="info-language"></span></div>
+      <div class="info-row"><span class="info-label">坐标</span><span id="info-coordinates"></span></div>
+      <div class="info-row"><span class="info-label">时区</span><span id="info-timezone"></span></div>
+      <div class="info-row"><span class="info-label">气候</span><span id="info-climate"></span></div>
+      <div class="info-row"><span class="info-label">地形</span><span id="info-terrain"></span></div>
+      <div class="info-row"><span class="info-label">GDP</span><span id="info-gdp"></span></div>
+      <div class="info-row"><span class="info-label">货币</span><span id="info-currency"></span></div>
+      <div class="info-row"><span class="info-label">文化特色</span><span id="info-culture"></span></div>
+    </div>
+  </div>
+
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <p>加载中...</p>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
