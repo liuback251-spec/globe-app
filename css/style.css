@@ -171,7 +171,9 @@ body {
 }
 
 #hover-card.hidden {
-  display: none;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
 }
 
 #hover-header {

@@ -9,19 +9,12 @@ export function createGlobe(scene, config) {
 
   const material = new THREE.MeshPhongMaterial({
     map: diffuse,
+    shininess: 25,
   });
 
   if (config.bump) {
-    const bumpMap = loader.load(config.bump);
-    material.bumpMap = bumpMap;
-    material.bumpScale = 0.03;
-  }
-
-  if (config.specular) {
-    const specularMap = loader.load(config.specular);
-    material.specularMap = specularMap;
-    material.specular = new THREE.Color(0x333333);
-    material.shininess = 15;
+    material.bumpMap = loader.load(config.bump);
+    material.bumpScale = 0.02;
   }
 
   const globe = new THREE.Mesh(geometry, material);
@@ -30,7 +23,7 @@ export function createGlobe(scene, config) {
 }
 
 export function createAtmosphere(scene) {
-  const geometry = new THREE.SphereGeometry(1.15, 64, 64);
+  const geometry = new THREE.SphereGeometry(1.08, 64, 64);
   const material = new THREE.ShaderMaterial({
     vertexShader: `
       varying vec3 vWorldNormal;
@@ -47,8 +40,10 @@ export function createAtmosphere(scene) {
       varying vec3 vWorldPosition;
       void main() {
         vec3 viewDir = normalize(uCameraPosition - vWorldPosition);
-        float intensity = pow(0.65 - dot(vWorldNormal, viewDir), 2.0);
-        gl_FragColor = vec4(0.3, 0.6, 1.0, 1.0) * intensity;
+        float rim = 1.0 - max(0.0, dot(vWorldNormal, viewDir));
+        float intensity = pow(rim, 3.0) * 1.2;
+        vec3 color = mix(vec3(0.4, 0.7, 1.0), vec3(0.6, 0.85, 1.0), rim);
+        gl_FragColor = vec4(color, intensity);
       }
     `,
     uniforms: {
@@ -57,6 +52,7 @@ export function createAtmosphere(scene) {
     blending: THREE.AdditiveBlending,
     side: THREE.BackSide,
     transparent: true,
+    depthWrite: false,
   });
 
   const atmosphere = new THREE.Mesh(geometry, material);

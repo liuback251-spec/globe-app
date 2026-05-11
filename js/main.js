@@ -3,25 +3,21 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createGlobe, createAtmosphere, createBorderOverlay } from './globe.js';
 import { createStarfield } from './stars.js';
 import { createOceanLabels } from './ocean-labels.js';
-import { generatePickingTexture, createPickSphere, identifyCountry, generateBorderTexture } from './picking.js';
+import { generatePickingTexture, createPickSphere, identifyCountry, generateBorderTexture, cleanupDecodedData } from './picking.js';
 import { loadCountriesData, getCountryInfo } from './countries.js';
-import { initUI, showHoverCard, hideHoverCard, showDetailPanel, hideDetailPanel, setCountriesDataRef } from './ui.js';
+import { initUI, showHoverCard, hideHoverCard, showDetailPanel, setCountriesDataRef } from './ui.js';
 
-// Scene
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000510);
 
-// Camera
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 0, 3);
 
-// Renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 document.getElementById('globe-container').appendChild(renderer.domElement);
 
-// Controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
@@ -33,14 +29,15 @@ controls.enablePan = false;
 controls.autoRotate = true;
 controls.autoRotateSpeed = 0.3;
 
-// Lights
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
 scene.add(ambientLight);
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);
 directionalLight.position.set(5, 3, 5);
 scene.add(directionalLight);
+const fillLight = new THREE.DirectionalLight(0x8899bb, 0.3);
+fillLight.position.set(-3, -1, -3);
+scene.add(fillLight);
 
-// Globe
 const globe = createGlobe(scene, {
   diffuse: 'assets/textures/earth_4k.jpg',
   bump: 'assets/textures/earth_bump_2k.jpg',
@@ -48,39 +45,47 @@ const globe = createGlobe(scene, {
 const atmosphere = createAtmosphere(scene);
 createStarfield(scene);
 
-// Ocean labels
 const updateOceanLabels = createOceanLabels(
-  document.getElementById('globe-container'), camera, renderer
+  document.getElementById('globe-container')
 );
 
-// Raycaster
 const raycaster = new THREE.Raycaster();
 let hoveredCountry = null;
-
-// Auto-rotate pause on interaction
-let userInteracting = false;
 let rotateTimeout = null;
+let isDragging = false;
+let pointerDownPos = { x: 0, y: 0 };
 
 function pauseAutoRotate() {
-  userInteracting = true;
   controls.autoRotate = false;
   if (rotateTimeout) clearTimeout(rotateTimeout);
 }
 
 function resumeAutoRotateDelayed() {
-  userInteracting = false;
   if (rotateTimeout) clearTimeout(rotateTimeout);
   rotateTimeout = setTimeout(() => {
-    if (!userInteracting) {
-      controls.autoRotate = true;
-    }
+    controls.autoRotate = true;
   }, 3000);
 }
 
-renderer.domElement.addEventListener('pointerdown', pauseAutoRotate);
-renderer.domElement.addEventListener('pointerup', resumeAutoRotateDelayed);
+renderer.domElement.addEventListener('pointerdown', (e) => {
+  isDragging = false;
+  pointerDownPos.x = e.clientX;
+  pointerDownPos.y = e.clientY;
+  pauseAutoRotate();
+});
 
-// Mouse move for hover
+renderer.domElement.addEventListener('pointermove', (e) => {
+  const dx = e.clientX - pointerDownPos.x;
+  const dy = e.clientY - pointerDownPos.y;
+  if (Math.sqrt(dx * dx + dy * dy) > 5) {
+    isDragging = true;
+  }
+});
+
+renderer.domElement.addEventListener('pointerup', () => {
+  resumeAutoRotateDelayed();
+});
+
 renderer.domElement.addEventListener('mousemove', (event) => {
   const country = identifyCountry(event, camera, raycaster);
   if (country !== hoveredCountry) {
@@ -96,22 +101,20 @@ renderer.domElement.addEventListener('mousemove', (event) => {
   }
 });
 
-// Click for detail panel
 renderer.domElement.addEventListener('click', (event) => {
+  if (isDragging) return;
   const country = identifyCountry(event, camera, raycaster);
   if (country) {
     showDetailPanel(country);
   }
 });
 
-// Resize
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// Render loop
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
@@ -121,19 +124,16 @@ function animate() {
 }
 animate();
 
-// Init: load data and generate picking texture
 async function init() {
   try {
     await loadCountriesData('assets/data/countries-info.json');
     const { countryIndexMap } = await generatePickingTexture('assets/data/countries.geojson');
     createPickSphere(scene);
 
-    // Country borders
     const borderTexture = generateBorderTexture();
     if (borderTexture) createBorderOverlay(scene, borderTexture);
+    cleanupDecodedData();
 
-    // Merge: countries-info data + centroid from picking
-    // Build a ref keyed by ISO_A2 for search fly-to
     const countriesDataRef = {};
     for (const [idx, country] of Object.entries(countryIndexMap)) {
       const iso = country.iso2;
@@ -144,6 +144,7 @@ async function init() {
           name: (info && info.name) || country.name,
           nameEn: (info && info.nameEn) || country.nameEn,
           _centroid: country._centroid,
+          iso2: iso,
         };
       }
     }
@@ -151,7 +152,6 @@ async function init() {
 
     initUI(camera, controls);
 
-    // Hide loading screen
     document.getElementById('loading-screen').classList.add('fade-out');
   } catch (err) {
     console.error('Init failed:', err);

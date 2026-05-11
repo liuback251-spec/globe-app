@@ -30,6 +30,8 @@ export function flyToCountry(camera, controls, targetLon, targetLat, duration = 
     const adjustedTheta = shortestAnglePath(startTheta, targetTheta);
     const startTime = performance.now();
 
+    const _spherical = new THREE.Spherical();
+
     function animateStep(now) {
       const elapsed = now - startTime;
       const t = Math.min(elapsed / duration, 1);
@@ -42,8 +44,8 @@ export function flyToCountry(camera, controls, targetLon, targetLat, duration = 
       const currentPhi = startPhi + (targetPhi - startPhi) * ease;
       const currentRadius = startRadius + (distance - startRadius) * ease;
 
-      const spherical = new THREE.Spherical(currentRadius, currentPhi, currentTheta);
-      camera.position.setFromSpherical(spherical);
+      _spherical.set(currentRadius, currentPhi, currentTheta);
+      camera.position.setFromSpherical(_spherical);
       controls.update();
 
       if (t < 1) {
