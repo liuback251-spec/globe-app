@@ -11,8 +11,14 @@ function setVisible(el, visible) {
 }
 
 function setPhotoSrc(el, url) {
-  if (url) { el.src = url; el.style.display = 'block'; }
-  else { el.src = ''; el.style.display = 'none'; }
+  if (url) {
+    el.onerror = () => { el.style.display = 'none'; };
+    el.src = url;
+    el.style.display = 'block';
+  } else {
+    el.src = '';
+    el.style.display = 'none';
+  }
 }
 
 function resolveInfo(geoProperties) {

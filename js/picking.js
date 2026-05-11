@@ -1,16 +1,12 @@
 import * as THREE from 'three';
+import { CANVAS_WIDTH, CANVAS_HEIGHT, fillGeometry, topoGeometryToGeoJSON } from './topo-utils.js';
 
 let pickingCanvas = null;
 let pickingTexture = null;
 let pickSphere = null;
 let countryIndexMap = {};
 let _pickingData = null;
-let _decodedArcs = null;
-let _features = null;
 const _mouse = new THREE.Vector2();
-
-const CANVAS_WIDTH = 2048;
-const CANVAS_HEIGHT = 1024;
 
 const NUMERIC_TO_ISO2 = {
   "004":"AF","008":"AL","012":"DZ","020":"AD","024":"AO","032":"AR","036":"AU","040":"AT",
@@ -38,138 +34,29 @@ const NUMERIC_TO_ISO2 = {
 };
 
 function indexToColor(index) {
-  const r = (index >> 16) & 0xff;
-  const g = (index >> 8) & 0xff;
-  const b = index & 0xff;
-  return `rgb(${r},${g},${b})`;
+  return `rgb(${(index >> 16) & 0xff},${(index >> 8) & 0xff},${index & 0xff})`;
 }
 
 function colorToIndex(r, g, b) {
   return (r << 16) | (g << 8) | b;
 }
 
-function geoToCanvas(lon, lat, width, height) {
-  const x = ((lon + 180) / 360) * width;
-  const y = ((90 - lat) / 180) * height;
-  return { x, y };
-}
-
-function traceRing(ctx, coordinates, width, height) {
-  if (coordinates.length < 3) return;
-  ctx.beginPath();
-  const first = geoToCanvas(coordinates[0][0], coordinates[0][1], width, height);
-  ctx.moveTo(first.x, first.y);
-  for (let i = 1; i < coordinates.length; i++) {
-    const pt = geoToCanvas(coordinates[i][0], coordinates[i][1], width, height);
-    ctx.lineTo(pt.x, pt.y);
-  }
-}
-
-function renderGeometry(ctx, geometry, width, height) {
-  if (geometry.type === 'Polygon') {
-    for (const ring of geometry.coordinates) {
-      traceRing(ctx, ring, width, height);
-    }
-    ctx.fill();
-  } else if (geometry.type === 'MultiPolygon') {
-    for (const polygon of geometry.coordinates) {
-      ctx.beginPath();
-      for (const ring of polygon) {
-        traceRing(ctx, ring, width, height);
-      }
-      ctx.fill();
-    }
-  }
-}
-
-function strokeGeometry(ctx, geometry, width, height) {
-  if (geometry.type === 'Polygon') {
-    for (const ring of geometry.coordinates) {
-      traceRing(ctx, ring, width, height);
-      ctx.stroke();
-    }
-  } else if (geometry.type === 'MultiPolygon') {
-    for (const polygon of geometry.coordinates) {
-      for (const ring of polygon) {
-        traceRing(ctx, ring, width, height);
-        ctx.stroke();
-      }
-    }
-  }
-}
-
 function computeCentroid(geometry) {
   let allCoords = [];
-  if (geometry.type === 'Polygon') {
-    allCoords = geometry.coordinates[0];
-  } else if (geometry.type === 'MultiPolygon') {
+  if (geometry.type === 'Polygon') allCoords = geometry.coordinates[0];
+  else if (geometry.type === 'MultiPolygon') {
     let maxLen = 0;
     for (const poly of geometry.coordinates) {
-      if (poly[0].length > maxLen) {
-        maxLen = poly[0].length;
-        allCoords = poly[0];
-      }
+      if (poly[0].length > maxLen) { maxLen = poly[0].length; allCoords = poly[0]; }
     }
   }
   if (allCoords.length === 0) return { lon: 0, lat: 0 };
   let sumLon = 0, sumLat = 0;
-  for (const coord of allCoords) {
-    sumLon += coord[0];
-    sumLat += coord[1];
-  }
+  for (const c of allCoords) { sumLon += c[0]; sumLat += c[1]; }
   return { lon: sumLon / allCoords.length, lat: sumLat / allCoords.length };
 }
 
-function decodeArcs(topo) {
-  const { arcs, transform } = topo;
-  const [sx, sy] = transform.scale;
-  const [tx, ty] = transform.translate;
-  return arcs.map(arc => {
-    let x = 0, y = 0;
-    const decoded = [];
-    for (const [dx, dy] of arc) {
-      x += dx;
-      y += dy;
-      decoded.push([x * sx + tx, y * sy + ty]);
-    }
-    return decoded;
-  });
-}
-
-function resolveArc(arcIndex, decodedArcs) {
-  if (arcIndex >= 0) return decodedArcs[arcIndex];
-  return decodedArcs[~arcIndex].slice().reverse();
-}
-
-function resolveRing(arcIndices, decodedArcs) {
-  const coords = [];
-  for (const ai of arcIndices) {
-    const arc = resolveArc(ai, decodedArcs);
-    for (let i = (coords.length > 0 ? 1 : 0); i < arc.length; i++) {
-      coords.push(arc[i]);
-    }
-  }
-  return coords;
-}
-
-function topoGeometryToGeoJSON(geometry, decodedArcs) {
-  if (geometry.type === 'Polygon') {
-    return { type: 'Polygon', coordinates: geometry.arcs.map(ring => resolveRing(ring, decodedArcs)) };
-  } else if (geometry.type === 'MultiPolygon') {
-    return { type: 'MultiPolygon', coordinates: geometry.arcs.map(p => p.map(ring => resolveRing(ring, decodedArcs))) };
-  }
-  return null;
-}
-
-export async function generatePickingTexture(topoJsonUrl) {
-  const response = await fetch(topoJsonUrl);
-  const topo = await response.json();
-
-  const decodedArcs = decodeArcs(topo);
-  const features = topo.objects.countries.geometries;
-  _decodedArcs = decodedArcs;
-  _features = features;
-
+export function generatePickingTexture(arcs, features) {
   pickingCanvas = document.createElement('canvas');
   pickingCanvas.width = CANVAS_WIDTH;
   pickingCanvas.height = CANVAS_HEIGHT;
@@ -182,31 +69,25 @@ export async function generatePickingTexture(topoJsonUrl) {
   let index = 1;
 
   for (const geom of features) {
-    const geojson = topoGeometryToGeoJSON(geom, decodedArcs);
+    const geojson = topoGeometryToGeoJSON(geom, arcs);
     if (!geojson) continue;
     if (geom.id == null) continue;
 
     ctx.fillStyle = indexToColor(index);
-    renderGeometry(ctx, geojson, CANVAS_WIDTH, CANVAS_HEIGHT);
+    fillGeometry(ctx, geojson, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     const numericId = String(geom.id);
     const iso2 = NUMERIC_TO_ISO2[numericId] || null;
     const name = geom.properties && geom.properties.name ? geom.properties.name : '';
-    const centroid = computeCentroid(geojson);
 
     countryIndexMap[index] = {
-      name,
-      nameEn: name,
-      iso2,
-      numericId,
-      _centroid: centroid,
+      name, nameEn: name, iso2, numericId,
+      _centroid: computeCentroid(geojson),
     };
-
     index++;
   }
 
   _pickingData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT).data;
-
   pickingTexture = new THREE.CanvasTexture(pickingCanvas);
   pickingTexture.flipY = false;
 
@@ -244,39 +125,5 @@ export function identifyCountry(event, camera, raycaster) {
   const r = _pickingData[offset], g = _pickingData[offset + 1], b = _pickingData[offset + 2];
 
   if (r === 0 && g === 0 && b === 0) return null;
-
-  const idx = colorToIndex(r, g, b);
-  return countryIndexMap[idx] || null;
-}
-
-export function generateBorderTexture() {
-  if (!_decodedArcs || !_features) return null;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = CANVAS_WIDTH;
-  canvas.height = CANVAS_HEIGHT;
-  const ctx = canvas.getContext('2d');
-
-  ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-  ctx.lineWidth = 1;
-
-  for (const geom of _features) {
-    if (geom.id == null) continue;
-    const geojson = topoGeometryToGeoJSON(geom, _decodedArcs);
-    if (!geojson) continue;
-    strokeGeometry(ctx, geojson, CANVAS_WIDTH, CANVAS_HEIGHT);
-  }
-
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.flipY = false;
-  return texture;
-}
-
-export function cleanupDecodedData() {
-  _decodedArcs = null;
-  _features = null;
-  if (pickingCanvas) {
-    pickingCanvas = null;
-  }
+  return countryIndexMap[colorToIndex(r, g, b)] || null;
 }

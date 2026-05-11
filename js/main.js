@@ -1,9 +1,12 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { createGlobe, createAtmosphere, createBorderOverlay } from './globe.js';
+import { createGlobe, createAtmosphere } from './globe.js';
 import { createStarfield } from './stars.js';
 import { createOceanLabels } from './ocean-labels.js';
-import { generatePickingTexture, createPickSphere, identifyCountry, generateBorderTexture, cleanupDecodedData } from './picking.js';
+import { createCountryLabels } from './country-labels.js';
+import { loadTopoJSON } from './topo-utils.js';
+import { generateEarthTexture } from './earth-texture.js';
+import { generatePickingTexture, createPickSphere, identifyCountry } from './picking.js';
 import { loadCountriesData, getCountryInfo } from './countries.js';
 import { initUI, showHoverCard, hideHoverCard, showDetailPanel, setCountriesDataRef } from './ui.js';
 
@@ -29,25 +32,15 @@ controls.enablePan = false;
 controls.autoRotate = true;
 controls.autoRotateSpeed = 0.3;
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
-scene.add(ambientLight);
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);
-directionalLight.position.set(5, 3, 5);
-scene.add(directionalLight);
-const fillLight = new THREE.DirectionalLight(0x8899bb, 0.3);
-fillLight.position.set(-3, -1, -3);
-scene.add(fillLight);
-
-const globe = createGlobe(scene, {
-  diffuse: 'assets/textures/earth_4k.jpg',
-  bump: 'assets/textures/earth_bump_2k.jpg',
-});
 const atmosphere = createAtmosphere(scene);
 createStarfield(scene);
 
 const updateOceanLabels = createOceanLabels(
   document.getElementById('globe-container')
 );
+
+let updateCountryLabels = null;
+let globe = null;
 
 const raycaster = new THREE.Raycaster();
 let hoveredCountry = null;
@@ -62,9 +55,7 @@ function pauseAutoRotate() {
 
 function resumeAutoRotateDelayed() {
   if (rotateTimeout) clearTimeout(rotateTimeout);
-  rotateTimeout = setTimeout(() => {
-    controls.autoRotate = true;
-  }, 3000);
+  rotateTimeout = setTimeout(() => { controls.autoRotate = true; }, 3000);
 }
 
 renderer.domElement.addEventListener('pointerdown', (e) => {
@@ -77,9 +68,7 @@ renderer.domElement.addEventListener('pointerdown', (e) => {
 renderer.domElement.addEventListener('pointermove', (e) => {
   const dx = e.clientX - pointerDownPos.x;
   const dy = e.clientY - pointerDownPos.y;
-  if (Math.sqrt(dx * dx + dy * dy) > 5) {
-    isDragging = true;
-  }
+  if (Math.sqrt(dx * dx + dy * dy) > 5) isDragging = true;
 });
 
 renderer.domElement.addEventListener('pointerup', () => {
@@ -101,12 +90,9 @@ renderer.domElement.addEventListener('mousemove', (event) => {
   }
 });
 
-renderer.domElement.addEventListener('click', (event) => {
+renderer.domElement.addEventListener('click', () => {
   if (isDragging) return;
-  const country = identifyCountry(event, camera, raycaster);
-  if (country) {
-    showDetailPanel(country);
-  }
+  if (hoveredCountry) showDetailPanel(hoveredCountry);
 });
 
 window.addEventListener('resize', () => {
@@ -120,20 +106,31 @@ function animate() {
   controls.update();
   atmosphere.material.uniforms.uCameraPosition.value.copy(camera.position);
   updateOceanLabels(camera, globe);
+  if (updateCountryLabels) updateCountryLabels(camera, globe);
   renderer.render(scene, camera);
 }
 animate();
 
 async function init() {
   try {
-    await loadCountriesData('assets/data/countries-info.json');
-    const { countryIndexMap } = await generatePickingTexture('assets/data/countries.geojson');
+    const topoUrl = 'assets/data/countries.geojson';
+
+    // Fetch TopoJSON once, load country data in parallel
+    const [{ arcs, features }] = await Promise.all([
+      loadTopoJSON(topoUrl),
+      loadCountriesData('assets/data/countries-info.json'),
+    ]);
+
+    // Generate textures and picking data in parallel
+    const [earthTexture, { countryIndexMap }] = await Promise.all([
+      Promise.resolve(generateEarthTexture(arcs, features)),
+      Promise.resolve(generatePickingTexture(arcs, features)),
+    ]);
+
+    globe = createGlobe(scene, earthTexture);
     createPickSphere(scene);
 
-    const borderTexture = generateBorderTexture();
-    if (borderTexture) createBorderOverlay(scene, borderTexture);
-    cleanupDecodedData();
-
+    // Merge country data with centroids
     const countriesDataRef = {};
     for (const [idx, country] of Object.entries(countryIndexMap)) {
       const iso = country.iso2;
@@ -150,8 +147,11 @@ async function init() {
     }
     setCountriesDataRef(countriesDataRef);
 
-    initUI(camera, controls);
+    updateCountryLabels = createCountryLabels(
+      document.getElementById('globe-container'), countriesDataRef
+    );
 
+    initUI(camera, controls);
     document.getElementById('loading-screen').classList.add('fade-out');
   } catch (err) {
     console.error('Init failed:', err);

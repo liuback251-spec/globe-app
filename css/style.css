@@ -354,7 +354,7 @@ body {
   top: 0;
   left: 0;
   pointer-events: none;
-  color: rgba(80, 160, 255, 0.5);
+  color: rgba(80, 160, 255, 0.4);
   font-size: 11px;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -362,6 +362,20 @@ body {
   text-shadow: 0 0 10px rgba(0, 50, 120, 0.8);
   z-index: 10;
   font-weight: 300;
+}
+
+.country-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  color: rgba(200, 230, 220, 0.7);
+  font-size: 10px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.8), 0 0 3px rgba(0, 0, 0, 0.9);
+  z-index: 10;
+  font-weight: 400;
 }
 
 /* Responsive */
