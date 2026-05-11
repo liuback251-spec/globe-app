@@ -15,27 +15,50 @@
     <div id="search-results" class="hidden"></div>
   </div>
 
-  <div id="info-panel" class="hidden">
-    <button id="info-close" title="关闭">&times;</button>
-    <div id="info-header">
-      <span id="info-flag"></span>
+  <!-- Hover card (lightweight) -->
+  <div id="hover-card" class="hidden">
+    <div id="hover-header">
+      <span id="hover-flag"></span>
       <div>
-        <h2 id="info-name-zh"></h2>
-        <h3 id="info-name-en"></h3>
+        <h3 id="hover-name-zh"></h3>
+        <span id="hover-name-en"></span>
       </div>
     </div>
-    <div id="info-body">
-      <div class="info-row"><span class="info-label">首都</span><span id="info-capital"></span></div>
-      <div class="info-row"><span class="info-label">人口</span><span id="info-population"></span></div>
-      <div class="info-row"><span class="info-label">面积</span><span id="info-area"></span></div>
-      <div class="info-row"><span class="info-label">语言</span><span id="info-language"></span></div>
-      <div class="info-row"><span class="info-label">坐标</span><span id="info-coordinates"></span></div>
-      <div class="info-row"><span class="info-label">时区</span><span id="info-timezone"></span></div>
-      <div class="info-row"><span class="info-label">气候</span><span id="info-climate"></span></div>
-      <div class="info-row"><span class="info-label">地形</span><span id="info-terrain"></span></div>
-      <div class="info-row"><span class="info-label">GDP</span><span id="info-gdp"></span></div>
-      <div class="info-row"><span class="info-label">货币</span><span id="info-currency"></span></div>
-      <div class="info-row"><span class="info-label">文化特色</span><span id="info-culture"></span></div>
+    <div id="hover-capital-row">
+      <span class="hover-label">首都</span>
+      <span id="hover-capital"></span>
+    </div>
+    <div id="hover-photo-wrap">
+      <img id="hover-photo" src="" alt="" />
+    </div>
+    <div id="hover-hint">点击查看详情</div>
+  </div>
+
+  <!-- Click detail panel (full info) -->
+  <div id="detail-panel" class="hidden">
+    <button id="detail-close" title="关闭">&times;</button>
+    <div id="detail-header">
+      <span id="detail-flag"></span>
+      <div>
+        <h2 id="detail-name-zh"></h2>
+        <h3 id="detail-name-en"></h3>
+      </div>
+    </div>
+    <div id="detail-photos">
+      <img id="detail-photo-1" class="detail-photo" src="" alt="" />
+    </div>
+    <div id="detail-body">
+      <div class="detail-row"><span class="detail-label">首都</span><span id="detail-capital"></span></div>
+      <div class="detail-row"><span class="detail-label">人口</span><span id="detail-population"></span></div>
+      <div class="detail-row"><span class="detail-label">面积</span><span id="detail-area"></span></div>
+      <div class="detail-row"><span class="detail-label">语言</span><span id="detail-language"></span></div>
+      <div class="detail-row"><span class="detail-label">坐标</span><span id="detail-coordinates"></span></div>
+      <div class="detail-row"><span class="detail-label">时区</span><span id="detail-timezone"></span></div>
+      <div class="detail-row"><span class="detail-label">气候</span><span id="detail-climate"></span></div>
+      <div class="detail-row"><span class="detail-label">地形</span><span id="detail-terrain"></span></div>
+      <div class="detail-row"><span class="detail-label">GDP</span><span id="detail-gdp"></span></div>
+      <div class="detail-row"><span class="detail-label">货币</span><span id="detail-currency"></span></div>
+      <div class="detail-row"><span class="detail-label">文化特色</span><span id="detail-culture"></span></div>
     </div>
   </div>
 

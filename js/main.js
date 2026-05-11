@@ -1,19 +1,22 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { createGlobe, createAtmosphere } from './globe.js';
-import { generatePickingTexture, createPickSphere, identifyCountry } from './picking.js';
+import { createGlobe, createAtmosphere, createBorderOverlay } from './globe.js';
+import { createStarfield } from './stars.js';
+import { createOceanLabels } from './ocean-labels.js';
+import { generatePickingTexture, createPickSphere, identifyCountry, generateBorderTexture } from './picking.js';
 import { loadCountriesData, getCountryInfo } from './countries.js';
-import { initUI, showInfoPanel, hideInfoPanel, togglePin, setCountriesDataRef } from './ui.js';
+import { initUI, showHoverCard, hideHoverCard, showDetailPanel, hideDetailPanel, setCountriesDataRef } from './ui.js';
 
 // Scene
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000510);
 
 // Camera
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 0, 3);
 
 // Renderer
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 document.getElementById('globe-container').appendChild(renderer.domElement);
@@ -38,9 +41,17 @@ directionalLight.position.set(5, 3, 5);
 scene.add(directionalLight);
 
 // Globe
-const earthTextureUrl = 'assets/textures/earth_2048.jpg';
-const globe = createGlobe(scene, earthTextureUrl);
-createAtmosphere(scene);
+const globe = createGlobe(scene, {
+  diffuse: 'assets/textures/earth_4k.jpg',
+  bump: 'assets/textures/earth_bump_2k.jpg',
+});
+const atmosphere = createAtmosphere(scene);
+createStarfield(scene);
+
+// Ocean labels
+const updateOceanLabels = createOceanLabels(
+  document.getElementById('globe-container'), camera, renderer
+);
 
 // Raycaster
 const raycaster = new THREE.Raycaster();
@@ -76,18 +87,20 @@ renderer.domElement.addEventListener('mousemove', (event) => {
     hoveredCountry = country;
     renderer.domElement.style.cursor = country ? 'pointer' : 'default';
     if (country) {
-      showInfoPanel(country);
+      pauseAutoRotate();
+      showHoverCard(country);
     } else {
-      hideInfoPanel();
+      hideHoverCard();
+      resumeAutoRotateDelayed();
     }
   }
 });
 
-// Click for pin
+// Click for detail panel
 renderer.domElement.addEventListener('click', (event) => {
   const country = identifyCountry(event, camera, raycaster);
   if (country) {
-    togglePin();
+    showDetailPanel(country);
   }
 });
 
@@ -102,6 +115,8 @@ window.addEventListener('resize', () => {
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
+  atmosphere.material.uniforms.uCameraPosition.value.copy(camera.position);
+  updateOceanLabels(camera, globe);
   renderer.render(scene, camera);
 }
 animate();
@@ -112,6 +127,10 @@ async function init() {
     await loadCountriesData('assets/data/countries-info.json');
     const { countryIndexMap } = await generatePickingTexture('assets/data/countries.geojson');
     createPickSphere(scene);
+
+    // Country borders
+    const borderTexture = generateBorderTexture();
+    if (borderTexture) createBorderOverlay(scene, borderTexture);
 
     // Merge: countries-info data + centroid from picking
     // Build a ref keyed by ISO_A2 for search fly-to

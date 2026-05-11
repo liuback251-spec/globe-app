@@ -1,15 +1,15 @@
 import { getCountryInfo, getAllCountryNames } from './countries.js';
 import { flyToCountry } from './camera-controls.js';
 
-let isPinned = false;
 let cameraRef = null;
 let controlsRef = null;
+let countriesDataGlobal = {};
 
 export function initUI(camera, controls) {
   cameraRef = camera;
   controlsRef = controls;
 
-  document.getElementById('info-close').addEventListener('click', closeInfoPanel);
+  document.getElementById('detail-close').addEventListener('click', hideDetailPanel);
 
   const searchInput = document.getElementById('search-input');
   const searchResults = document.getElementById('search-results');
@@ -43,8 +43,19 @@ export function initUI(camera, controls) {
         selectCountry(match.iso);
         searchResults.classList.add('hidden');
         searchInput.value = match.name;
+        searchInput.blur();
       });
       searchResults.appendChild(div);
+    }
+  });
+
+  // Enter key triggers first result
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const firstResult = searchResults.querySelector('.search-result-item');
+      if (firstResult) {
+        firstResult.click();
+      }
     }
   });
 
@@ -55,93 +66,101 @@ export function initUI(camera, controls) {
   });
 }
 
-function selectCountry(iso) {
+async function selectCountry(iso) {
   const info = countriesDataGlobal[iso];
-  if (!info || !info._centroid) return;
-  flyToCountry(cameraRef, controlsRef, info._centroid.lon, info._centroid.lat);
-  if (info) showInfoPanelFromData(info);
+  if (!info) return;
+  if (info._centroid) {
+    await flyToCountry(cameraRef, controlsRef, info._centroid.lon, info._centroid.lat);
+  }
+  showDetailPanel(info);
 }
-
-let countriesDataGlobal = {};
 
 export function setCountriesDataRef(data) {
   countriesDataGlobal = data;
 }
 
-export function showInfoPanel(geoProperties) {
-  const info = getCountryInfo(geoProperties.iso2, geoProperties.iso3);
-  const panel = document.getElementById('info-panel');
+// --- Hover Card ---
 
-  if (!info) {
-    document.getElementById('info-name-zh').textContent = geoProperties.name || '未知';
-    document.getElementById('info-name-en').textContent = geoProperties.nameEn || '';
-    document.getElementById('info-flag').textContent = '';
-    document.getElementById('info-capital').textContent = '数据暂无';
-    document.getElementById('info-population').textContent = '数据暂无';
-    document.getElementById('info-area').textContent = '数据暂无';
-    document.getElementById('info-language').textContent = '数据暂无';
-    document.getElementById('info-coordinates').textContent = geoProperties._centroid
-      ? `${geoProperties._centroid.lat.toFixed(2)}°, ${geoProperties._centroid.lon.toFixed(2)}°`
-      : '数据暂无';
-    document.getElementById('info-timezone').textContent = '数据暂无';
-    document.getElementById('info-climate').textContent = '数据暂无';
-    document.getElementById('info-terrain').textContent = '数据暂无';
-    document.getElementById('info-gdp').textContent = '数据暂无';
-    document.getElementById('info-currency').textContent = '数据暂无';
-    document.getElementById('info-culture').textContent = '数据暂无';
+export function showHoverCard(geoProperties) {
+  const info = getCountryInfo(geoProperties.iso2, geoProperties.iso3);
+  const card = document.getElementById('hover-card');
+
+  const name = (info && info.name) || geoProperties.name || '未知';
+  const nameEn = (info && info.nameEn) || geoProperties.nameEn || '';
+  const flag = (info && info.flag) || '';
+  const capital = (info && info.capital) || '数据暂无';
+  const photo = (info && info.capitalPhoto) || '';
+
+  document.getElementById('hover-flag').textContent = flag;
+  document.getElementById('hover-name-zh').textContent = name;
+  document.getElementById('hover-name-en').textContent = nameEn;
+  document.getElementById('hover-capital-row').querySelector('#hover-capital').textContent = capital;
+
+  const photoEl = document.getElementById('hover-photo');
+  if (photo) {
+    photoEl.src = photo;
+    photoEl.style.display = 'block';
   } else {
-    showInfoPanelFromData(info, geoProperties._centroid);
+    photoEl.src = '';
+    photoEl.style.display = 'none';
   }
 
-  panel.classList.remove('hidden');
-  panel.classList.add('visible');
+  card.classList.remove('hidden');
+  card.classList.add('visible');
 }
 
-function showInfoPanelFromData(info, centroid) {
-  document.getElementById('info-flag').textContent = info.flag || '';
-  document.getElementById('info-name-zh').textContent = info.name;
-  document.getElementById('info-name-en').textContent = info.nameEn;
-  document.getElementById('info-capital').textContent = info.capital || '数据暂无';
-  document.getElementById('info-population').textContent = info.population || '数据暂无';
-  document.getElementById('info-area').textContent = info.area || '数据暂无';
-  document.getElementById('info-language').textContent = info.language || '数据暂无';
-  document.getElementById('info-coordinates').textContent = info.coordinates || '数据暂无';
-  document.getElementById('info-timezone').textContent = info.timezone || '数据暂无';
-  document.getElementById('info-climate').textContent = info.climate || '数据暂无';
-  document.getElementById('info-terrain').textContent = info.terrain || '数据暂无';
-  document.getElementById('info-gdp').textContent = info.gdp || '数据暂无';
-  document.getElementById('info-currency').textContent = info.currency || '数据暂无';
-  document.getElementById('info-culture').textContent = info.culturalFeatures || '数据暂无';
-
-  const panel = document.getElementById('info-panel');
-  panel.classList.remove('hidden');
-  panel.classList.add('visible');
+export function hideHoverCard() {
+  const card = document.getElementById('hover-card');
+  card.classList.remove('visible');
+  card.classList.add('hidden');
 }
 
-export function hideInfoPanel() {
-  if (isPinned) return;
-  const panel = document.getElementById('info-panel');
+// --- Detail Panel ---
+
+export function showDetailPanel(geoProperties) {
+  const info = (geoProperties.iso2 || geoProperties.iso3)
+    ? getCountryInfo(geoProperties.iso2, geoProperties.iso3)
+    : geoProperties;
+
+  const panel = document.getElementById('detail-panel');
+
+  const name = (info && info.name) || geoProperties.name || '未知';
+  const nameEn = (info && info.nameEn) || geoProperties.nameEn || '';
+  const flag = (info && info.flag) || '';
+
+  document.getElementById('detail-flag').textContent = flag;
+  document.getElementById('detail-name-zh').textContent = name;
+  document.getElementById('detail-name-en').textContent = nameEn;
+
+  const photo = (info && info.capitalPhoto) || '';
+  const photoEl = document.getElementById('detail-photo-1');
+  if (photo) {
+    photoEl.src = photo;
+    photoEl.style.display = 'block';
+  } else {
+    photoEl.src = '';
+    photoEl.style.display = 'none';
+  }
+
+  document.getElementById('detail-capital').textContent = (info && info.capital) || '数据暂无';
+  document.getElementById('detail-population').textContent = (info && info.population) || '数据暂无';
+  document.getElementById('detail-area').textContent = (info && info.area) || '数据暂无';
+  document.getElementById('detail-language').textContent = (info && info.language) || '数据暂无';
+  document.getElementById('detail-coordinates').textContent = (info && info.coordinates) || '数据暂无';
+  document.getElementById('detail-timezone').textContent = (info && info.timezone) || '数据暂无';
+  document.getElementById('detail-climate').textContent = (info && info.climate) || '数据暂无';
+  document.getElementById('detail-terrain').textContent = (info && info.terrain) || '数据暂无';
+  document.getElementById('detail-gdp').textContent = (info && info.gdp) || '数据暂无';
+  document.getElementById('detail-currency').textContent = (info && info.currency) || '数据暂无';
+  document.getElementById('detail-culture').textContent = (info && info.culturalFeatures) || '数据暂无';
+
+  panel.classList.remove('hidden');
+  panel.classList.add('visible');
+  hideHoverCard();
+}
+
+export function hideDetailPanel() {
+  const panel = document.getElementById('detail-panel');
   panel.classList.remove('visible');
   panel.classList.add('hidden');
-}
-
-export function togglePin() {
-  isPinned = !isPinned;
-  const panel = document.getElementById('info-panel');
-  if (isPinned) {
-    panel.classList.add('pinned');
-  } else {
-    panel.classList.remove('pinned');
-  }
-}
-
-export function closeInfoPanel() {
-  isPinned = false;
-  const panel = document.getElementById('info-panel');
-  panel.classList.remove('visible', 'pinned');
-  panel.classList.add('hidden');
-}
-
-export function getIsPinned() {
-  return isPinned;
 }

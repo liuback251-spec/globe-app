@@ -13,7 +13,8 @@
     "gdp": "17.96万亿美元 (2023)",
     "currency": "人民币 (CNY/RMB)",
     "flag": "🇨🇳",
-    "culturalFeatures": "五千年文明、春节、长城、功夫、茶文化"
+    "culturalFeatures": "五千年文明、春节、长城、功夫、茶文化",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Great_Wall_of_China%2C_Mutianyu_Section.jpg/400px-Great_Wall_of_China%2C_Mutianyu_Section.jpg"
   },
   "US": {
     "name": "美国",
@@ -29,7 +30,8 @@
     "gdp": "25.46万亿美元 (2023)",
     "currency": "美元 (USD)",
     "flag": "🇺🇸",
-    "culturalFeatures": "好莱坞、爵士乐、感恩节、硅谷"
+    "culturalFeatures": "好莱坞、爵士乐、感恩节、硅谷",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Washington_Monument_and_Reflecting_Pool.jpg/400px-Washington_Monument_and_Reflecting_Pool.jpg"
   },
   "JP": {
     "name": "日本",
@@ -45,7 +47,8 @@
     "gdp": "4.23万亿美元 (2023)",
     "currency": "日元 (JPY)",
     "flag": "🇯🇵",
-    "culturalFeatures": "武士道、动漫、寿司、樱花、温泉"
+    "culturalFeatures": "武士道、动漫、寿司、樱花、温泉",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Tokyo_Tower_from_Roppongi_Hills.jpg/400px-Tokyo_Tower_from_Roppongi_Hills.jpg"
   },
   "GB": {
     "name": "英国",
@@ -61,7 +64,8 @@
     "gdp": "3.07万亿美元 (2023)",
     "currency": "英镑 (GBP)",
     "flag": "🇬🇧",
-    "culturalFeatures": "莎士比亚、下午茶、英超、大本钟"
+    "culturalFeatures": "莎士比亚、下午茶、英超、大本钟",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Big_Ben_London.jpg/400px-Big_Ben_London.jpg"
   },
   "FR": {
     "name": "法国",
@@ -77,7 +81,8 @@
     "gdp": "2.78万亿美元 (2023)",
     "currency": "欧元 (EUR)",
     "flag": "🇫🇷",
-    "culturalFeatures": "埃菲尔铁塔、法式料理、葡萄酒、时装"
+    "culturalFeatures": "埃菲尔铁塔、法式料理、葡萄酒、时装",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons.jpg/400px-Tour_Eiffel_Wikimedia_Commons.jpg"
   },
   "DE": {
     "name": "德国",
@@ -93,7 +98,8 @@
     "gdp": "4.07万亿美元 (2023)",
     "currency": "欧元 (EUR)",
     "flag": "🇩🇪",
-    "culturalFeatures": "啤酒节、汽车工业、古典音乐、城堡"
+    "culturalFeatures": "啤酒节、汽车工业、古典音乐、城堡",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Berlin_Brandenburg_Gate.jpg/400px-Berlin_Brandenburg_Gate.jpg"
   },
   "IN": {
     "name": "印度",
@@ -109,7 +115,8 @@
     "gdp": "3.73万亿美元 (2023)",
     "currency": "印度卢比 (INR)",
     "flag": "🇮🇳",
-    "culturalFeatures": "泰姬陵、瑜伽、宝莱坞、咖喱"
+    "culturalFeatures": "泰姬陵、瑜伽、宝莱坞、咖喱",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Taj_Mahal%2C_Agra%2C_India_edit.jpg/400px-Taj_Mahal%2C_Agra%2C_India_edit.jpg"
   },
   "BR": {
     "name": "巴西",
@@ -125,7 +132,8 @@
     "gdp": "2.17万亿美元 (2023)",
     "currency": "巴西雷亚尔 (BRL)",
     "flag": "🇧🇷",
-    "culturalFeatures": "足球、桑巴、狂欢节、亚马逊雨林"
+    "culturalFeatures": "足球、桑巴、狂欢节、亚马逊雨林",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Cristo_Redentor_-_Rio_de_Janeiro.jpg/400px-Cristo_Redentor_-_Rio_de_Janeiro.jpg"
   },
   "RU": {
     "name": "俄罗斯",
@@ -173,7 +181,8 @@
     "gdp": "1.69万亿美元 (2023)",
     "currency": "澳大利亚元 (AUD)",
     "flag": "🇦🇺",
-    "culturalFeatures": "袋鼠、考拉、大堡礁、悉尼歌剧院"
+    "culturalFeatures": "袋鼠、考拉、大堡礁、悉尼歌剧院",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Sydney_opera_house.jpg/400px-Sydney_opera_house.jpg"
   },
   "KR": {
     "name": "韩国",
@@ -189,7 +198,8 @@
     "gdp": "1.71万亿美元 (2023)",
     "currency": "韩元 (KRW)",
     "flag": "🇰🇷",
-    "culturalFeatures": "K-pop、韩剧、泡菜、跆拳道"
+    "culturalFeatures": "K-pop、韩剧、泡菜、跆拳道",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Gyeongbokgung-Seoul.jpg/400px-Gyeongbokgung-Seoul.jpg"
   },
   "IT": {
     "name": "意大利",
@@ -205,7 +215,8 @@
     "gdp": "2.01万亿美元 (2023)",
     "currency": "欧元 (EUR)",
     "flag": "🇮🇹",
-    "culturalFeatures": "罗马斗兽场、比萨斜塔、意面、文艺复兴"
+    "culturalFeatures": "罗马斗兽场、比萨斜塔、意面、文艺复兴",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Colosseum_in_Rome%2C_Italy.jpg/400px-Colosseum_in_Rome%2C_Italy.jpg"
   },
   "ES": {
     "name": "西班牙",
@@ -221,7 +232,8 @@
     "gdp": "1.40万亿美元 (2023)",
     "currency": "欧元 (EUR)",
     "flag": "🇪🇸",
-    "culturalFeatures": "弗拉门戈、斗牛、海鲜饭、高迪建筑"
+    "culturalFeatures": "弗拉门戈、斗牛、海鲜饭、高迪建筑",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Plaza_de_Espa%C3%B1a_%28Sevilla%29.jpg/400px-Plaza_de_Espa%C3%B1a_%28Sevilla%29.jpg"
   },
   "MX": {
     "name": "墨西哥",
@@ -237,7 +249,8 @@
     "gdp": "1.32万亿美元 (2023)",
     "currency": "墨西哥比索 (MXN)",
     "flag": "🇲🇽",
-    "culturalFeatures": "玛雅文明、亡灵节、辣椒、仙人掌"
+    "culturalFeatures": "玛雅文明、亡灵节、辣椒、仙人掌",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Palacio_de_Bellas_Artes_-_Ciudad_de_M%C3%A9xico.jpg/400px-Palacio_de_Bellas_Artes_-_Ciudad_de_M%C3%A9xico.jpg"
   },
   "ID": {
     "name": "印度尼西亚",
@@ -253,7 +266,8 @@
     "gdp": "1.32万亿美元 (2023)",
     "currency": "印尼盾 (IDR)",
     "flag": "🇮🇩",
-    "culturalFeatures": "巴厘岛、婆罗浮屠、batik、群岛文化"
+    "culturalFeatures": "巴厘岛、婆罗浮屠、batik、群岛文化",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Borobudur_Temple.jpg/400px-Borobudur_Temple.jpg"
   },
   "TR": {
     "name": "土耳其",
@@ -269,7 +283,8 @@
     "gdp": "1.11万亿美元 (2023)",
     "currency": "土耳其里拉 (TRY)",
     "flag": "🇹🇷",
-    "culturalFeatures": "圣索菲亚大教堂、烤肉、土耳其浴、热气球"
+    "culturalFeatures": "圣索菲亚大教堂、烤肉、土耳其浴、热气球",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Hagia_Sophia_Mars_2013.jpg/400px-Hagia_Sophia_Mars_2013.jpg"
   },
   "SA": {
     "name": "沙特阿拉伯",
@@ -301,7 +316,8 @@
     "gdp": "1.01万亿美元 (2023)",
     "currency": "欧元 (EUR)",
     "flag": "🇳🇱",
-    "culturalFeatures": "风车、郁金香、运河、梵高"
+    "culturalFeatures": "风车、郁金香、运河、梵高",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Amsterdam_canals.jpg/400px-Amsterdam_canals.jpg"
   },
   "CH": {
     "name": "瑞士",
@@ -317,7 +333,8 @@
     "gdp": "0.88万亿美元 (2023)",
     "currency": "瑞士法郎 (CHF)",
     "flag": "🇨🇭",
-    "culturalFeatures": "钟表、巧克力、银行、阿尔卑斯山"
+    "culturalFeatures": "钟表、巧克力、银行、阿尔卑斯山",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Lucerne_from_Pilatus.jpg/400px-Lucerne_from_Pilatus.jpg"
   },
   "SE": {
     "name": "瑞典",
@@ -365,7 +382,8 @@
     "gdp": "0.51万亿美元 (2023)",
     "currency": "泰铢 (THB)",
     "flag": "🇹🇭",
-    "culturalFeatures": "佛寺、泰拳、冬阴功、人妖表演"
+    "culturalFeatures": "佛寺、泰拳、冬阴功、人妖表演",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Bangkok_skyline_sunset.jpg/400px-Bangkok_skyline_sunset.jpg"
   },
   "EG": {
     "name": "埃及",
@@ -381,7 +399,8 @@
     "gdp": "0.40万亿美元 (2023)",
     "currency": "埃及镑 (EGP)",
     "flag": "🇪🇬",
-    "culturalFeatures": "金字塔、狮身人面像、尼罗河、法老文明"
+    "culturalFeatures": "金字塔、狮身人面像、尼罗河、法老文明",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Kheops-Pyramid.jpg/400px-Kheops-Pyramid.jpg"
   },
   "NG": {
     "name": "尼日利亚",
@@ -461,7 +480,8 @@
     "gdp": "0.43万亿美元 (2023)",
     "currency": "越南盾 (VND)",
     "flag": "🇻🇳",
-    "culturalFeatures": "下龙湾、河内古街、奥黛、越南粉"
+    "culturalFeatures": "下龙湾、河内古街、奥黛、越南粉",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Hanoi_old_quarter.jpg/400px-Hanoi_old_quarter.jpg"
   },
   "CO": {
     "name": "哥伦比亚",
@@ -493,7 +513,8 @@
     "gdp": "0.27万亿美元 (2023)",
     "currency": "秘鲁索尔 (PEN)",
     "flag": "🇵🇪",
-    "culturalFeatures": "马丘比丘、纳斯卡线条、印加文明"
+    "culturalFeatures": "马丘比丘、纳斯卡线条、印加文明",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Machu_Picchu%2C_Peru.jpg/400px-Machu_Picchu%2C_Peru.jpg"
   },
   "CL": {
     "name": "智利",
@@ -573,7 +594,8 @@
     "gdp": "0.49万亿美元 (2023)",
     "currency": "挪威克朗 (NOK)",
     "flag": "🇳🇴",
-    "culturalFeatures": "峡湾、极光、维京文化、诺贝尔和平奖"
+    "culturalFeatures": "峡湾、极光、维京文化、诺贝尔和平奖",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Norwegian_fjord.jpg/400px-Norwegian_fjord.jpg"
   },
   "FI": {
     "name": "芬兰",
@@ -653,7 +675,8 @@
     "gdp": "0.41万亿美元 (2023)",
     "currency": "马来西亚林吉特 (MYR)",
     "flag": "🇲🇾",
-    "culturalFeatures": "双子塔、娘惹文化、肉骨茶、多元种族"
+    "culturalFeatures": "双子塔、娘惹文化、肉骨茶、多元种族",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Petronas_Twin_Towers.jpg/400px-Petronas_Twin_Towers.jpg"
   },
   "SG": {
     "name": "新加坡",
@@ -669,7 +692,8 @@
     "gdp": "0.50万亿美元 (2023)",
     "currency": "新加坡元 (SGD)",
     "flag": "🇸🇬",
-    "culturalFeatures": "鱼尾狮、花园城市、美食天堂、多元文化"
+    "culturalFeatures": "鱼尾狮、花园城市、美食天堂、多元文化",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Singapore_skyline.jpg/400px-Singapore_skyline.jpg"
   },
   "IL": {
     "name": "以色列",
@@ -685,7 +709,8 @@
     "gdp": "0.52万亿美元 (2023)",
     "currency": "以色列新谢克尔 (ILS)",
     "flag": "🇮🇱",
-    "culturalFeatures": "耶路撒冷圣城、死海、基布兹、高科技"
+    "culturalFeatures": "耶路撒冷圣城、死海、基布兹、高科技",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Jerusalem_Dome_of_the_rock_BW_14.JPG/400px-Jerusalem_Dome_of_the_rock_BW_14.JPG"
   },
   "AE": {
     "name": "阿联酋",
@@ -701,7 +726,8 @@
     "gdp": "0.50万亿美元 (2023)",
     "currency": "阿联酋迪拉姆 (AED)",
     "flag": "🇦🇪",
-    "culturalFeatures": "哈利法塔、帆船酒店、迪拜购物节"
+    "culturalFeatures": "哈利法塔、帆船酒店、迪拜购物节",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Dubai_Marina_Skyline.jpg/400px-Dubai_Marina_Skyline.jpg"
   },
   "PK": {
     "name": "巴基斯坦",
@@ -781,7 +807,8 @@
     "gdp": "0.29万亿美元 (2023)",
     "currency": "捷克克朗 (CZK)",
     "flag": "🇨🇿",
-    "culturalFeatures": "布拉格城堡、啤酒文化、卡夫卡"
+    "culturalFeatures": "布拉格城堡、啤酒文化、卡夫卡",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Prague_old_town.jpg/400px-Prague_old_town.jpg"
   },
   "GR": {
     "name": "希腊",
@@ -797,7 +824,8 @@
     "gdp": "0.22万亿美元 (2023)",
     "currency": "欧元 (EUR)",
     "flag": "🇬🇷",
-    "culturalFeatures": "雅典卫城、奥林匹克、地中海文明"
+    "culturalFeatures": "雅典卫城、奥林匹克、地中海文明",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Acropolis_from_south.jpg/400px-Acropolis_from_south.jpg"
   },
   "HU": {
     "name": "匈牙利",
@@ -925,7 +953,8 @@
     "gdp": "0.04万亿美元 (2023)",
     "currency": "尼泊尔卢比 (NPR)",
     "flag": "🇳🇵",
-    "culturalFeatures": "珠穆朗玛峰、加德满都谷地、佛教圣地"
+    "culturalFeatures": "珠穆朗玛峰、加德满都谷地、佛教圣地",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Mount_Everest_from_Kala_Patthar.jpg/400px-Mount_Everest_from_Kala_Patthar.jpg"
   },
   "KH": {
     "name": "柬埔寨",
@@ -941,7 +970,8 @@
     "gdp": "0.03万亿美元 (2023)",
     "currency": "柬埔寨瑞尔 (KHR)",
     "flag": "🇰🇭",
-    "culturalFeatures": "吴哥窟、高棉文明"
+    "culturalFeatures": "吴哥窟、高棉文明",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Angkor_Wat_Temple.jpg/400px-Angkor_Wat_Temple.jpg"
   },
   "LK": {
     "name": "斯里兰卡",
@@ -1021,7 +1051,8 @@
     "gdp": "0.03万亿美元 (2023)",
     "currency": "格鲁吉亚拉里 (GEL)",
     "flag": "🇬🇪",
-    "culturalFeatures": "葡萄酒发源地、第比利斯老城"
+    "culturalFeatures": "葡萄酒发源地、第比利斯老城",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Tbilisi_old_town.jpg/400px-Tbilisi_old_town.jpg"
   },
   "HR": {
     "name": "克罗地亚",
@@ -1037,7 +1068,8 @@
     "gdp": "0.08万亿美元 (2023)",
     "currency": "欧元 (EUR)",
     "flag": "🇭🇷",
-    "culturalFeatures": "杜布罗夫尼克、亚得里亚海海岸"
+    "culturalFeatures": "杜布罗夫尼克、亚得里亚海海岸",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Dubrovnik_old_town.jpg/400px-Dubrovnik_old_town.jpg"
   },
   "RS": {
     "name": "塞尔维亚",
@@ -1165,7 +1197,8 @@
     "gdp": "0.03万亿美元 (2023)",
     "currency": "冰岛克朗 (ISK)",
     "flag": "🇮🇸",
-    "culturalFeatures": "极光、间歇泉、蓝湖温泉"
+    "culturalFeatures": "极光、间歇泉、蓝湖温泉",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Gullfoss_Iceland.jpg/400px-Gullfoss_Iceland.jpg"
   },
   "CU": {
     "name": "古巴",
@@ -1293,7 +1326,8 @@
     "gdp": "0.05万亿美元 (2023)",
     "currency": "约旦第纳尔 (JOD)",
     "flag": "🇯🇴",
-    "culturalFeatures": "佩特拉古城、死海、瓦迪拉姆"
+    "culturalFeatures": "佩特拉古城、死海、瓦迪拉姆",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Petra_Jordan.jpg/400px-Petra_Jordan.jpg"
   },
   "LB": {
     "name": "黎巴嫩",
@@ -1325,7 +1359,8 @@
     "gdp": "0.79万亿美元 (2023)",
     "currency": "新台币 (TWD)",
     "flag": "🇹🇼",
-    "culturalFeatures": "台北101、夜市文化、茶文化"
+    "culturalFeatures": "台北101、夜市文化、茶文化",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Taipei_101_from_afar.jpg/400px-Taipei_101_from_afar.jpg"
   },
   "HK": {
     "name": "香港",
@@ -1341,7 +1376,8 @@
     "gdp": "0.39万亿美元 (2023)",
     "currency": "港元 (HKD)",
     "flag": "🇭🇰",
-    "culturalFeatures": "维多利亚港、港式茶餐厅、金融中心"
+    "culturalFeatures": "维多利亚港、港式茶餐厅、金融中心",
+    "capitalPhoto": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Hong_Kong_skyline.jpg/400px-Hong_Kong_skyline.jpg"
   },
   "MO": {
     "name": "澳门",
@@ -1438,22 +1474,6 @@
     "currency": "阿富汗尼 (AFN)",
     "flag": "🇦🇫",
     "culturalFeatures": "巴米扬大佛遗址、丝绸之路"
-  },
-  "NZ": {
-    "name": "新西兰",
-    "nameEn": "New Zealand",
-    "capital": "惠灵顿 / Wellington",
-    "population": "520万 (2023)",
-    "area": "268,021 km²",
-    "language": "英语、毛利语",
-    "coordinates": "40.90°S, 174.89°E",
-    "timezone": "UTC+12",
-    "climate": "温带海洋性",
-    "terrain": "南岛山地、北岛火山",
-    "gdp": "0.25万亿美元 (2023)",
-    "currency": "新西兰元 (NZD)",
-    "flag": "🇳🇿",
-    "culturalFeatures": "毛利文化、指环王取景地、极限运动"
   },
   "_default": {
     "name": "",
