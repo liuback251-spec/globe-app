@@ -10,15 +10,33 @@ function setVisible(el, visible) {
   el.classList.toggle('hidden', !visible);
 }
 
-function setPhotoSrc(el, url) {
-  if (url) {
-    el.onerror = () => { el.style.display = 'none'; };
-    el.src = url;
-    el.style.display = 'block';
-  } else {
-    el.src = '';
-    el.style.display = 'none';
-  }
+function generatePlaceholder(flag, name) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 400;
+  canvas.height = 200;
+  const ctx = canvas.getContext('2d');
+
+  const grad = ctx.createLinearGradient(0, 0, 400, 200);
+  grad.addColorStop(0, '#0a1628');
+  grad.addColorStop(1, '#162840');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 400, 200);
+
+  ctx.font = '64px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(flag || '', 200, 85);
+
+  ctx.font = '14px sans-serif';
+  ctx.fillStyle = 'rgba(200, 220, 255, 0.6)';
+  ctx.fillText(name || '', 200, 150);
+
+  return canvas.toDataURL();
+}
+
+function setPhotoSrc(el, flag, name) {
+  el.src = generatePlaceholder(flag, name);
+  el.style.display = 'block';
 }
 
 function resolveInfo(geoProperties) {
@@ -101,7 +119,7 @@ export function showHoverCard(geoProperties) {
   document.getElementById('hover-name-zh').textContent = name;
   document.getElementById('hover-name-en').textContent = nameEn;
   document.getElementById('hover-capital').textContent = info.capital || '数据暂无';
-  setPhotoSrc(document.getElementById('hover-photo'), info.capitalPhoto || '');
+  setPhotoSrc(document.getElementById('hover-photo'), info.flag, name);
 
   setVisible(document.getElementById('hover-card'), true);
 }
@@ -116,7 +134,7 @@ export function showDetailPanel(geoProperties) {
   document.getElementById('detail-flag').textContent = info.flag || '';
   document.getElementById('detail-name-zh').textContent = info.name || '未知';
   document.getElementById('detail-name-en').textContent = info.nameEn || '';
-  setPhotoSrc(document.getElementById('detail-photo-1'), info.capitalPhoto || '');
+  setPhotoSrc(document.getElementById('detail-photo-1'), info.flag, info.name || '');
 
   const val = (key) => info[key] || '数据暂无';
   document.getElementById('detail-capital').textContent = val('capital');
