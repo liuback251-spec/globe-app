@@ -105,8 +105,10 @@ function animate() {
   requestAnimationFrame(animate);
   controls.update();
   atmosphere.material.uniforms.uCameraPosition.value.copy(camera.position);
-  updateOceanLabels(camera, globe);
-  if (updateCountryLabels) updateCountryLabels(camera, globe);
+  if (globe) {
+    updateOceanLabels(camera, globe);
+    if (updateCountryLabels) updateCountryLabels(camera, globe);
+  }
   renderer.render(scene, camera);
 }
 animate();
